@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["create_client","Create a client with default api key (v8)."],["create_client_with_custom_api_version","Create a client with custom api key."]],"struct":[["Client","Veryfi Rust Client to call Veryfi API."]]});

@@ -3,6 +3,8 @@ name = "veryfi"
 version = "1.0.0"
 edition = "2021"
 authors = ["Veryfi"]
+license = "MIT"
+description = "Module for communicating with the Veryfi OCR API"
 
 [dependencies]
 hmac-sha256 = "1.0.0"
