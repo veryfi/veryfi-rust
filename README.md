@@ -19,7 +19,9 @@ If you don't have an account with Veryfi, please go ahead and register here: [ht
 ### Rust API Client Library
 The **Veryfi** library can be used to communicate with Veryfi API. All available functionality is described here DOC
 
-Below is the sample script using **Veryfi** to OCR and extract data from a document:
+Below is the sample script using **Veryfi** to OCR and process data from a document:
+
+### Process a document.
 
 ```rust
 use veryfi::client::create_client;
@@ -33,12 +35,12 @@ fn main() {
     
     let client = create_client(client_id, client_secret, username, api_key);
     let categories = vec!["Advertising & Marketing", "Automotive"];
-    let file = "path_to_your_file";
+    let file_path = "path_to_your_file";
     let delete_after_processing = true;
     let additional_parameters = Map::new();
     
     let response = client.process_document(file_path, categories, delete_after_processing, additional_parameters);
-    print!(response); // to print
+    print!("{}", response); // to print
     let json_response: Value = from_str(&*response).unwrap();
     // ...
 }
@@ -63,7 +65,7 @@ fn main() {
     parameters.insert("notes".to_string(), Value::from(notes.clone()));
 
     let response = client.update_document(document_id, parameters);
-    print!(response); // to print
+    print!("{}", response); // to print
     let json_response: Value = from_str(&*response).unwrap();
     // ...
 }
