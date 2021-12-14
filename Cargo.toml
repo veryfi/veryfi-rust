@@ -5,6 +5,10 @@ edition = "2021"
 authors = ["Veryfi"]
 license = "MIT"
 description = "Module for communicating with the Veryfi OCR API"
+include = [
+    "**/*.rs",
+    "Cargo.toml"
+]
 
 [dependencies]
 hmac-sha256 = "1.0.0"
