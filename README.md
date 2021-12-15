@@ -1,3 +1,5 @@
+https://docs.rs/veryfi/1.0.0/veryfi/
+
 ![Veryfi Logo](https://cdn.veryfi.com/logos/veryfi-logo-wide-github.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
