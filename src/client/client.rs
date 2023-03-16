@@ -321,7 +321,7 @@ mod tests {
 
     #[test]
     fn test_process_document() {
-        let file_path = &*format!("{}/resources/receipt.jpeg", get_cargo_path());
+        let file_path = &*format!("{}/resources/receipt.jpg", get_cargo_path());
         let categories = Vec::new();
         let additional_parameters = Map::new();
         let client = create_client(
@@ -354,7 +354,7 @@ mod tests {
             USERNAME.to_string().clone(),
             API_KEY.to_string().clone(),
         );
-        let url = "https://veryfi-testing-public.s3.us-west-2.amazonaws.com/receipt.jpg";
+        let url = "https://raw.githubusercontent.com/veryfi/veryfi-python/master/tests/assets/receipt_public.jpg";
         let mock = mock("POST", "/documents/")
             .with_body_from_file(&*format!(
                 "{}/resources/processDocument.json",
@@ -387,7 +387,7 @@ mod tests {
             API_KEY.to_string().clone(),
         );
         let notes = generate_random_string();
-        let id = "49089556";
+        let id = "125661908";
         let mut parameters = Map::new();
         parameters.insert("notes".to_string(), Value::from(notes.clone()));
         let path = &*format!("/documents/{}/", id);
