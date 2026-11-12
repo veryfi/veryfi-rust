@@ -151,7 +151,7 @@ impl Client {
     /// * `file_path` - Path on disk to a file to submit for data extraction.
     /// * `categories` - Array of categories Veryfi can use to categorize the document.
     /// * `delete_after_processing` - Delete this document from Veryfi after data has been extracted.
-    /// * `additional_request_parameters` - Map with Additional request parameters.
+    /// * `additional_request_parameters` - Map with additional request parameters. Insert `thinking` as `"light"` or `"deep"` (slower) to run an extra LLM pass on the line items; leave it out to turn it off. Needs thinking mode enabled for your account.
     ///
     /// * `return` - A JSON String with data extracted from the document.
     pub fn process_document(
@@ -194,7 +194,7 @@ impl Client {
     /// * `boost_mode` - Flag that tells Veryfi whether boost mode should be enabled. When set to 1, Veryfi will skip data enrichment steps, but will process the document faster.
     /// * `external_id` - Optional custom document identifier. Use this if you would like to assign your own ID to documents.
     /// * `max_pages_to_process` - When sending a long document to Veryfi for processing, this parameter controls how many pages of the document will be read and processed, starting from page 1.
-    /// * `additional_request_parameters` - Additional request parameters.
+    /// * `additional_request_parameters` - Additional request parameters. Insert `thinking` as `"light"` or `"deep"` (slower) to run an extra LLM pass on the line items; leave it out to turn it off. Needs thinking mode enabled for your account.
     ///
     /// * `return` - A JSON String with data extracted from the document.
     pub fn process_document_url(
@@ -268,7 +268,8 @@ mod tests {
     use crate::client::create_client;
     use mockito::mock;
     use rand::{distributions::Alphanumeric, Rng};
-    use serde_json::{from_str, Map, Value};
+    use mockito::Matcher;
+    use serde_json::{from_str, json, Map, Value};
     use std::path::PathBuf;
 
     static CLIENT_ID: &str = "client_id";
@@ -376,6 +377,67 @@ mod tests {
         assert!(json_response.is_object());
         let id = json_response.get("id").unwrap();
         assert!(id.is_number());
+    }
+
+    fn thinking_client() -> crate::client::Client {
+        create_client(
+            CLIENT_ID.to_string(),
+            CLIENT_SECRET.to_string(),
+            USERNAME.to_string(),
+            API_KEY.to_string(),
+        )
+    }
+
+    #[test]
+    fn test_process_document_sends_thinking() {
+        let file_path = &*format!("{}/resources/receipt.jpg", get_cargo_path());
+        for mode in ["light", "deep"] {
+            let mut additional_parameters = Map::new();
+            additional_parameters.insert("thinking".to_string(), Value::from(mode));
+            let mock = mock("POST", "/documents/")
+                .match_body(Matcher::PartialJson(json!({ "thinking": mode })))
+                .with_body("{}")
+                .create();
+            thinking_client().process_document(file_path, Vec::new(), true, additional_parameters);
+            mock.assert();
+        }
+    }
+
+    #[test]
+    fn test_process_document_url_sends_thinking() {
+        for mode in ["light", "deep"] {
+            let mut additional_parameters = Map::new();
+            additional_parameters.insert("thinking".to_string(), Value::from(mode));
+            let mock = mock("POST", "/documents/")
+                .match_body(Matcher::PartialJson(json!({ "thinking": mode })))
+                .with_body("{}")
+                .create();
+            thinking_client().process_document_url(
+                "https://cdn.example.com/receipt.jpg",
+                Vec::new(),
+                true,
+                0,
+                "",
+                1,
+                Vec::new(),
+                additional_parameters,
+            );
+            mock.assert();
+        }
+    }
+
+    #[test]
+    fn test_process_document_without_thinking_does_not_send_it() {
+        let file_path = &*format!("{}/resources/receipt.jpg", get_cargo_path());
+        let with_thinking = mock("POST", "/documents/")
+            .match_body(Matcher::Regex("\"thinking\"".to_string()))
+            .with_body("{}")
+            .expect(0)
+            .create();
+        let without_thinking = mock("POST", "/documents/").with_body("{}").expect(1).create();
+        thinking_client().process_document(file_path, Vec::new(), true, Map::new());
+        with_thinking.assert();
+        without_thinking.assert();
     }
 
     #[test]
