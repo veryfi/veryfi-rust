@@ -49,6 +49,14 @@ fn main() {
 }
 ```
 
+Run thinking on the line items by adding `thinking` (`"light"` or `"deep"`) to the additional parameters; leave it out to turn it off. `process_document` and `process_document_url` accept it, and `"deep"` takes longer than `"light"`. It only takes effect if thinking mode is enabled for your account.
+
+```rust
+let mut additional_parameters = Map::new();
+additional_parameters.insert("thinking".to_string(), Value::from("light"));
+let response = client.process_document(file_path, categories, delete_after_processing, additional_parameters);
+```
+
 ### Update a document
 
 ```rust
