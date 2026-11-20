@@ -84,7 +84,7 @@ impl Client {
         let api_url = format!("{}{}", self.get_url(), endpoint_name);
         let request = Session::new()
             .request(http_verb, api_url)
-            .header("User-Agent", "Rust Veryfi-Rust/1.0.0")
+            .header("User-Agent", "Rust Veryfi-Rust/1.1.0")
             .header("Accept", "application/json")
             .header("Content-Type", "application/json")
             .header("Client-Id", self.client_id.clone())

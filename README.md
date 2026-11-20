@@ -1,4 +1,4 @@
-https://docs.rs/veryfi/1.0.0/veryfi/
+https://docs.rs/veryfi/1.1.0/veryfi/
 
 <img src="https://user-images.githubusercontent.com/30125790/212157461-58bdc714-2f89-44c2-8e4d-d42bee74854e.png#gh-dark-mode-only" width="200">
 <img src="https://user-images.githubusercontent.com/30125790/212157486-bfd08c5d-9337-4b78-be6f-230dc63838ba.png#gh-light-mode-only" width="200">
@@ -11,7 +11,7 @@ https://docs.rs/veryfi/1.0.0/veryfi/
 ## Installation
 Add to your cargo.tml
 ```toml
-veryfi = "1.0.0"
+veryfi = "1.1.0"
 ```
 
 ## Getting Started
